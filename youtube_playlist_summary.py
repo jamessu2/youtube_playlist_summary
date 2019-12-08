@@ -16,70 +16,63 @@ import requests
 print("***** Fetching Data From A Youtube Playlist *****")
 
 
-api_key = "YOUR_API_KEY"		# *** update with your own API key! ***
+api_key = "YOUR_API_CODE"		# *** update with your own API key! ***
 playlist_id = "PLAzDHex22XQz25EiHGjLPATj1C2ScT-hx"		# this will need to be changed to an argument
-max_results = 50											# change this to be hardcoded into the params
+max_results = 3											# change this to be hardcoded into the params
 														# 	Remember: 50 is max. Default is 5
 
 playlist_parameters = {'key': api_key, 'playlistId': playlist_id, 'maxResults': str(max_results), 'part': 'snippet'}
 playlist_response = requests.get('https://www.googleapis.com/youtube/v3/playlistItems', params=playlist_parameters)
 playlist_data = playlist_response.json()		# Sidenote: same as 'json.loads(response.content)', via the json module
 
-# For testing purposes:
-with open('playlist_data.json', 'w', encoding='utf-8') as f:
-    json.dump(playlist_data, f, ensure_ascii=False, indent=4)
 
-
-playlist_video_titles = []
-playlist_video_ids = []
-playlist_video_durations = []
-total_playlist_time = {
-	'hours': 0,
-	'minutes': 0,
-	'seconds': 0
-}
+video_titles, video_ids, video_durations = []
+total_time = {'hours': 0, 'minutes': 0, 'seconds': 0}
 
 
 for item in playlist_data['items']:
-	video_title = item['snippet']['title']
-	video_id = item['snippet']['resourceId']['videoId']
-
-	video_parameters = {'key': api_key, 'id': video_id, 'part': 'contentDetails'}
-	video_response = requests.get('https://www.googleapis.com/youtube/v3/videos', params=video_parameters)
-	video_data = video_response.json()
-	video_duration = video_data['items'][0]['contentDetails']['duration']
-
-	playlist_video_titles.append(video_title)
-	playlist_video_ids.append(video_id)
-	playlist_video_durations.append(video_duration)
+	video_titles.append(item['snippet']['title'])
+	video_ids.append(item['snippet']['resourceId']['videoId'])
 
 
-	# ******** Need to edit this section to account for times 1 day or longer ************
-	# ******** Or, just set a try-except, and flag a video when it's over 24 hours long ************
+videos_parameters = {'key': api_key, 'id': ','.join(video_ids), 'part': 'contentDetails'}
+videos_response = requests.get('https://www.googleapis.com/youtube/v3/videos', params=videos_parameters)
+videos_data = videos_response.json()
+
+# **** For testing purposes: ****
+with open('videos_data.json', 'w', encoding='utf-8') as f:
+    json.dump(videos_data, f, ensure_ascii=False, indent=4)
+# *******************************
+
+for item in videos_data['items']:
+	video_duration = item['contentDetails']['duration']
+	video_durations.append(video_duration)
 
 	video_duration_re = re.search(r'^PT(.*?H)?(.*?M)?(.*?S)?', video_duration)
 	hours = video_duration_re.group(1)
 	minutes = video_duration_re.group(2)
 	seconds = video_duration_re.group(3)
 
-	if hours: total_playlist_time['hours'] += int(hours[:-1])
-	if minutes: total_playlist_time['minutes'] += int(minutes[:-1])
-	if seconds: total_playlist_time['seconds'] += int(seconds[:-1])
+	if hours: total_time['hours'] += int(hours[:-1])
+	if minutes: total_time['minutes'] += int(minutes[:-1])
+	if seconds: total_time['seconds'] += int(seconds[:-1])
 
-# Simplify the times
-if total_playlist_time['seconds'] >= 60:
-	total_playlist_time['minutes'] += total_playlist_time['seconds'] // 60
-	total_playlist_time['seconds'] = total_playlist_time['seconds'] % 60
-if total_playlist_time['minutes'] >= 60:
-	total_playlist_time['hours'] += total_playlist_time['minutes'] // 60
-	total_playlist_time['minutes'] = total_playlist_time['minutes'] % 60
-
-for index, (video_title, video_duration) in enumerate(zip(playlist_video_titles, playlist_video_durations), start=1):
+for index, (video_title, video_duration) in enumerate(zip(video_titles, video_durations), start=1):
 	print(f"Video #{index}:")
 	print(f"\t Title: {video_title}")
 	print(f"\t Duration: {video_duration}\n")
 
-print(f"Duration of entire playlist = {total_playlist_time}\n")
+# Simplify the times
+total_time['hours'] += total_time['minutes'] // 60
+total_time['minutes'] += total_time['seconds'] // 60
+total_time['minutes'] = total_time['minutes'] % 60
+total_time['seconds'] = total_time['seconds'] % 60
+print(f"Duration of entire playlist = {total_time}\n")
+
+
+
+
+
 
 
 
