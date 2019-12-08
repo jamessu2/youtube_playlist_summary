@@ -38,9 +38,26 @@ Assuming you've never created an API key before, don't worry: it's super simple.
 Note: Code was tested with Youtube API as of Dec 2019.
 
 
-
 # Usage
 ```
 python3 youtube_playlist_summary.py <insert link to youtube playlist>
 ```
+
+
+# Sidenotes
+
+If on a Mac, for the first time you need to:
+
+```
+cd /Applications/Python3.7	# or whatever your Python version is
+./Install\ Certificates.command
+```
+
+to resolve a *"certificate verify failed"* error.
+
+From https://github.com/nficano/pytube/issues/241: "It installs a set of default Root Certificates for the python ssl module by installing the certifi https://pypi.python.org/pypi/certifi."
+
+
+
+Also, Youtube video durations are in a format called: ["ISO 8601"](https://en.wikipedia.org/wiki/ISO_8601#Durations)
 
