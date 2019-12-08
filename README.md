@@ -4,13 +4,22 @@ Print out the videos in a Youtube playlist, and count the total watch time for t
 # Goals
 - (DONE) Create a Youtube API key 
 - (DONE) Fetch the JSON data for the playlist, and load it to a dictionary
-- Loop through the data to retrieve all video titles
-- Loop through the data to retrieve all video time lengths
-- Calculate the sum of all video time lengths
-- Print out a summary of video titles, their lenghts, 
+- (DONE) Loop through the data to retrieve all video titles
+- (DONE) Loop through the data to retrieve all video time lengths
+- (DONE) Calculate the sum of all video time lengths
+- (DONE) Print out a summary of video titles, their lenghts, 
 	and the name of the playlist, as well as the total time of the playlist
 
 Note: There is a difference between "Total items in playlist" vs "Public items in playlist"
+
+# Improvements
+- Only make video requests in batches, after up-to-50 video ids are obtained 
+		(string with comma-separated-video-ids)
+- Account for playlists that have more than 50 videos (i.e. nextPageToken(s))
+- Figure out a more efficient way to add durations.
+	- Is there built-in functionality to convert ISO 8601 to times? Perhaps the [parser module](https://dateutil.readthedocs.io/en/stable/parser.html)?
+- Account for days and weeks in total duration printout
+- Change playlist id to be a user input
 
 
 # Install/Setup
