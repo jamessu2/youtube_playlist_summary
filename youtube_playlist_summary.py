@@ -1,7 +1,16 @@
 import json
 import re
 import requests
-# import dateutil.parser
+
+
+# Improvements that can be made:
+# - Only make video requests in batches, after up-to-50 video ids are obtained 
+#		(string with comma-separated-video-ids)
+# - Account for playlists that have more than 50 videos (i.e. nextPageToken(s))
+# - Figure out a more efficient way to add durations
+# - Account for days/weeks/months in total duration printout
+# - To make things more efficent, print out video titles and durations in same loop as original request
+# - Change playlist id to be a user input
 
 
 print("***** Fetching Data From A Youtube Playlist *****")
@@ -9,14 +18,16 @@ print("***** Fetching Data From A Youtube Playlist *****")
 
 api_key = "YOUR_API_KEY"		# *** update with your own API key! ***
 playlist_id = "PLAzDHex22XQz25EiHGjLPATj1C2ScT-hx"		# this will need to be changed to an argument
-max_results = 3											# change this to be hardcoded into the params
-														# 	Remember: 50 is max
+max_results = 50											# change this to be hardcoded into the params
+														# 	Remember: 50 is max. Default is 5
 
 playlist_parameters = {'key': api_key, 'playlistId': playlist_id, 'maxResults': str(max_results), 'part': 'snippet'}
 playlist_response = requests.get('https://www.googleapis.com/youtube/v3/playlistItems', params=playlist_parameters)
-
 playlist_data = playlist_response.json()		# Sidenote: same as 'json.loads(response.content)', via the json module
 
+# For testing purposes:
+with open('playlist_data.json', 'w', encoding='utf-8') as f:
+    json.dump(playlist_data, f, ensure_ascii=False, indent=4)
 
 
 playlist_video_titles = []
@@ -28,106 +39,47 @@ total_playlist_time = {
 	'seconds': 0
 }
 
-# ******** CREATE FOR LOOP HERE ************
 
-# for item in playlist_data['items']:
-# 	playlist_video_titles.append(item['snippet']['title'])
-# 	playlist_video_ids.append(item['snippet']['resourceId']['videoId'])
+for item in playlist_data['items']:
+	video_title = item['snippet']['title']
+	video_id = item['snippet']['resourceId']['videoId']
 
+	video_parameters = {'key': api_key, 'id': video_id, 'part': 'contentDetails'}
+	video_response = requests.get('https://www.googleapis.com/youtube/v3/videos', params=video_parameters)
+	video_data = video_response.json()
+	video_duration = video_data['items'][0]['contentDetails']['duration']
 
-
-# *******************************************
-
-
-
-first_video_title = playlist_data['items'][0]['snippet']['title']
-first_video_id = playlist_data['items'][0]['snippet']['resourceId']['videoId']
-print("First video title:", first_video_title)
-print("First video id:", first_video_id)
-
-video_parameters = {'key': api_key, 'id': first_video_id, 'part': 'contentDetails'}
-video_response = requests.get('https://www.googleapis.com/youtube/v3/videos', params=video_parameters)
-
-video_data = video_response.json()
-
-video_duration = video_data['items'][0]['contentDetails']['duration']
-print(video_duration)
-print(type(video_duration))
-
-video_duration_re = re.search(r'^PT(.*?H)?(.*?M)?(.*?S)?', video_duration)
-hours = video_duration_re.group(1)
-minutes = video_duration_re.group(2)
-seconds = video_duration_re.group(3)
-
-if hours: print(hours)
-if minutes: print(minutes)
-if seconds: print(seconds)
+	playlist_video_titles.append(video_title)
+	playlist_video_ids.append(video_id)
+	playlist_video_durations.append(video_duration)
 
 
+	# ******** Need to edit this section to account for times 1 day or longer ************
+	# ******** Or, just set a try-except, and flag a video when it's over 24 hours long ************
 
+	video_duration_re = re.search(r'^PT(.*?H)?(.*?M)?(.*?S)?', video_duration)
+	hours = video_duration_re.group(1)
+	minutes = video_duration_re.group(2)
+	seconds = video_duration_re.group(3)
 
+	if hours: total_playlist_time['hours'] += int(hours[:-1])
+	if minutes: total_playlist_time['minutes'] += int(minutes[:-1])
+	if seconds: total_playlist_time['seconds'] += int(seconds[:-1])
 
+# Simplify the times
+if total_playlist_time['seconds'] >= 60:
+	total_playlist_time['minutes'] += total_playlist_time['seconds'] // 60
+	total_playlist_time['seconds'] = total_playlist_time['seconds'] % 60
+if total_playlist_time['minutes'] >= 60:
+	total_playlist_time['hours'] += total_playlist_time['minutes'] // 60
+	total_playlist_time['minutes'] = total_playlist_time['minutes'] % 60
 
-second_video_title = playlist_data['items'][1]['snippet']['title']
-second_video_id = playlist_data['items'][1]['snippet']['resourceId']['videoId']
-print("Second  video title:", second_video_title)
-print("Second video id:", second_video_id)
+for index, (video_title, video_duration) in enumerate(zip(playlist_video_titles, playlist_video_durations), start=1):
+	print(f"Video #{index}:")
+	print(f"\t Title: {video_title}")
+	print(f"\t Duration: {video_duration}\n")
 
-# Get the video lengths
-
-video_parameters = {'key': api_key, 'id': second_video_id, 'part': 'contentDetails'}
-video_response = requests.get('https://www.googleapis.com/youtube/v3/videos', params=video_parameters)
-
-video_data = video_response.json()
-
-video_duration = video_data['items'][0]['contentDetails']['duration']
-print(video_duration)
-print(type(video_duration))
-
-
-# ******** BEGIN EDIT ************
-# ******** Need to edit this section to account for times 1 day or longer ************
-# ******** Or, just set a try-except, and flag a video when it's over 24 hours long ************
-
-video_duration_re = re.search(r'^PT(.*?H)?(.*?M)?(.*?S)?', video_duration)
-hours = video_duration_re.group(1)
-minutes = video_duration_re.group(2)
-seconds = video_duration_re.group(3)
-
-if hours: print(hours)
-if minutes: print(minutes)
-if seconds: print(seconds)
-
-# ******** END EDIT ************
-
-
-
-
-
-
-
-# ********* You can put up to 50 video IDs in a VIDEOS request!!!! **********
-# ********* Just separate the video IDs by commas!!!! **********
-
-
-
-# # video_id = "pSudEWBAYRE"	# EXO's Love Shot MV
-
-# # url_snippet = f"https://www.googleapis.com/youtube/v3/videos?part=snippet&id={video_id}&key={api_key}"
-
-
-# url_content_details = f"https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id={video_id}&key={api_key}"
-
-# json_url_content_details = urllib.request.urlopen(url_contentDetails)
-# data_content_details = json.loads(json_url_content_details.read())
-
-# print(data_content_details['items'][0]['contentDetails']['duration'])
-
-
-
-# with open('data.json', 'w', encoding='utf-8') as f:
-#     json.dump(data, f, ensure_ascii=False, indent=4)
-
+print(f"Duration of entire playlist = {total_playlist_time}\n")
 
 
 

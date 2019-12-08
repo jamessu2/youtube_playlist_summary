@@ -3,7 +3,7 @@ Print out the videos in a Youtube playlist, and count the total watch time for t
 
 # Goals
 - (DONE) Create a Youtube API key 
-- Fetch the JSON data for the playlist, and load it to a dictionary
+- (DONE) Fetch the JSON data for the playlist, and load it to a dictionary
 - Loop through the data to retrieve all video titles
 - Loop through the data to retrieve all video time lengths
 - Calculate the sum of all video time lengths
