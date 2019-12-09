@@ -5,7 +5,7 @@ Well, look no further!
 
 
 ## Functionality
-This Python script will tally up the total watch time for any Youtube playlist of your choice.
+This Python script will tally up the total watch time of all public videos, for any Youtube playlist of your choice.
 
 
 ## Install/Setup
@@ -38,7 +38,7 @@ python3 youtube_playlist_summary.py <paste link to a youtube playlist>
 
 
 ## Getting A Youtube API Key
-Don't worry, getting a Youtube API key is a piece of chocolate cake:
+Don't worry, getting a Youtube API key is a **piece of cake**. Like, 10 clicks.
 
 1. Go to https://console.developers.google.com/ (sign in with a gmail account)
 2. Create a "NEW PROJECT" 
@@ -71,7 +71,7 @@ Next-level functionality:
 	- You'd need an OAuth client ID, which is a different ballgame and outside the scope of this project.
 - A "[Deleted video]" in a Youtube playlist won't count to this project's calculated total watch time, but it will still count as one of the max 50 videoIds in a single video GET request. (50 is the max allowed.)
 	- So for example, if a Youtube playlist has 52 videos, 5 of which are labeled as "[Deleted video]", this script will ping the Youtube API 4 times:
-	1. Pinging "playlist" once for the first 50 videos
-	2. Pinging "video" once for the title and duration of those 50 videos
-	3. Pinging "playlist" again for the next 2 videos
-	4. Pinging "video" again for the title and duration of those 2 videos
+		1. Pinging "playlist" once for the first 50 videos
+		2. Pinging "video" once for the title and duration of those 50 videos
+		3. Pinging "playlist" again for the next 2 videos
+		4. Pinging "video" again for the title and duration of those 2 videos
