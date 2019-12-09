@@ -62,7 +62,7 @@ Done!
 Next-level functionality:
 
 1. Make the playlist argument be an actual `input()` once the script has started running. *(Simple adjustment.)*
-2. Allow user to provide **either** a link **or** the playlist id itself
+2. Allow user to provide **either** a link **or** the playlist id itself. *(Simple adjustment.)*
 3. Figure out a more efficient way to add durations.
 	- Is there built-in functionality to convert ISO 8601 to times? Perhaps the [parser module](https://dateutil.readthedocs.io/en/stable/parser.html)?
 
@@ -72,7 +72,7 @@ Next-level functionality:
 - Youtube's video durations are supplied in a format called: ["ISO 8601"](https://en.wikipedia.org/wiki/ISO_8601#Durations)
 - With an API key, we can retrieve a count of *"Total items in playlist"*, which includes non-public / non-published videos. However, the videos themselves can't actually be retrieved with API alone.
 	- You'd need an OAuth client ID, which is a different ballgame and outside the scope of this project.
-- A "[Deleted video]" in a Youtube playlist won't count to this project's calculated total watch time, but it will still count as one of the max 50 videoIds in a single video GET request. (50 is the max allowed.)
+- A "[Deleted video]" in a Youtube playlist won't count to this project's calculated total watch time, but it will still count as one of the 50 video ids allowed in a single video GET request. (50 is the max allowed.)
 	- So for example, if a Youtube playlist has 52 videos, 5 of which are labeled as "[Deleted video]", this script will ping the Youtube API 4 times:
 		1. Pinging "playlist" once for the first 50 videos
 		2. Pinging "video" once for the title and duration of those 50 videos
