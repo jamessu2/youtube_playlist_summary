@@ -59,8 +59,9 @@ Done! Now just copy the API key that was generated, and paste it into the `youtu
 
 Next-level functionality:
 
-1. Allow user to input **either** a link **or** the playlist id itself
-2. Figure out a more efficient way to add durations.
+1. Make the playlist argument be an actual `input` once the script has started running. *(Simple adjustment.)*
+2. Allow user to provide **either** a link **or** the playlist id itself
+3. Figure out a more efficient way to add durations.
 	- Is there built-in functionality to convert ISO 8601 to times? Perhaps the [parser module](https://dateutil.readthedocs.io/en/stable/parser.html)?
 
 
