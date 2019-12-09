@@ -1,20 +1,12 @@
 # youtube_playlist_summary
-Print out the videos in a Youtube playlist, and count the total watch time for the entire playlist
+Ever been curious how long it would take to watch through an entire Youtube playlist?
 
-# Goals
-- (DONE) Create a Youtube API key 
-- (DONE) Fetch the JSON data for the playlist, and load it to a dictionary
-- (DONE) Loop through the data to retrieve all video titles
-- (DONE) Loop through the data to retrieve all video time lengths
-- (DONE) Calculate the sum of all video time lengths
-- (DONE) Print out a summary of video titles, their lenghts, 
-	and the name of the playlist, as well as the total time of the playlist
+Well, look no further!
 
-Note: There is a difference between "Total items in playlist" vs "Public items in playlist"
+This Python script will tally up the total watch time for any Youtube playlist of your choice.
 
-# Improvements
-- Only make video requests in batches, after up-to-50 video ids are obtained 
-		(string with comma-separated-video-ids)
+
+# Improvements To Make
 - Account for playlists that have more than 50 videos (i.e. nextPageToken(s))
 - Figure out a more efficient way to add durations.
 	- Is there built-in functionality to convert ISO 8601 to times? Perhaps the [parser module](https://dateutil.readthedocs.io/en/stable/parser.html)?
@@ -26,6 +18,7 @@ Note: There is a difference between "Total items in playlist" vs "Public items i
 ```
 git clone "https://github.com/jamessu2/youtube_playlist_summary.git"
 cd youtube_playlist_summary
+pip install -r requirements.txt
 ```
 
 You will need to go to the Youtube API page, log in with your account, and quickly click a few buttons to get a API key – which you will put into the script.
@@ -46,27 +39,30 @@ Assuming you've never created an API key before, don't worry: it's super simple.
 
 Note: Code was tested with Youtube API as of Dec 2019.
 
+Note: You need **Python 3** installed.
+
 
 # Usage
+From the `youtube_playlist_summary` directory, run: 
+
 ```
-python3 youtube_playlist_summary.py <insert link to youtube playlist>
+python3 youtube_playlist_summary.py <paste link to a youtube playlist>
 ```
 
 
 # Sidenotes
-
-If on a Mac, for the first time you need to:
+If you're using a Mac and you're running into a *"certificate verify failed"* error, you will need to do a one-time:
 
 ```
 cd /Applications/Python3.7	# or whatever your Python version is
 ./Install\ Certificates.command
 ```
 
-to resolve a *"certificate verify failed"* error.
-
-From https://github.com/nficano/pytube/issues/241: "It installs a set of default Root Certificates for the python ssl module by installing the certifi https://pypi.python.org/pypi/certifi."
+This will, according to https://github.com/nficano/pytube/issues/241: "installs a set of default Root Certificates for the python ssl module by installing the certifi https://pypi.python.org/pypi/certifi."
 
 
+Youtube video durations are in a format called: ["ISO 8601"](https://en.wikipedia.org/wiki/ISO_8601#Durations)
 
-Also, Youtube video durations are in a format called: ["ISO 8601"](https://en.wikipedia.org/wiki/ISO_8601#Durations)
+
+(There is a difference between "Total items in playlist" vs "Public items in playlist")
 
