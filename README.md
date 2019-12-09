@@ -15,9 +15,11 @@ cd youtube_playlist_summary
 pip install -r requirements.txt
 ```
 
-**Note #1**: You will need a Youtube API key. If you don't know how to get one: don't worry, it's super simple. Just follow the quick instructions in the **Getting A Youtube API Key** section below.
+**Note #1**: You will need a Youtube API key. Paste it into the `youtube_playlist_summary.py` file, as indicated by comments (near the top).
+	
+If you don't know how to get one: don't worry, it's super simple :). Just follow the quick instructions in the **Getting A Youtube API Key** section below.
 
-**Note #2**: You need **Python 3** installed.
+**Note #2**: You need [**Python 3**](https://www.python.org/downloads/) installed.
 
 **Note #3**: If you're using a Mac and you're running into a *"certificate verify failed"* error, you will need to do a one-time:
 
@@ -51,7 +53,7 @@ Don't worry, getting a Youtube API key is a **piece of cake**. Like, 10 clicks.
 	- Now you have created your own Youtube API
 6. Back at the [API home page](https://console.developers.google.com/):, in the "Credentials" section, click on "CREATE CREDENTIALS" in the topbar, and select the "API key" option
 
-Done! Now just copy the API key that was generated, and paste it into the `youtube_playlist_summary.py` file, as indicated by comments (near the top).
+Done!
 
 
 ## Future Developments
@@ -59,7 +61,7 @@ Done! Now just copy the API key that was generated, and paste it into the `youtu
 
 Next-level functionality:
 
-1. Make the playlist argument be an actual `input` once the script has started running. *(Simple adjustment.)*
+1. Make the playlist argument be an actual `input()` once the script has started running. *(Simple adjustment.)*
 2. Allow user to provide **either** a link **or** the playlist id itself
 3. Figure out a more efficient way to add durations.
 	- Is there built-in functionality to convert ISO 8601 to times? Perhaps the [parser module](https://dateutil.readthedocs.io/en/stable/parser.html)?
