@@ -1,8 +1,6 @@
 # youtube_playlist_summary
 Ever been curious how long it would take to watch through an entire Youtube playlist?
 
-Well, look no further!
-
 
 ## Functionality
 This Python script will tally up the total watch time of all public videos, for any Youtube playlist of your choice.
@@ -17,7 +15,7 @@ pip install -r requirements.txt
 
 **Note #1**: You will need a Youtube API key. Paste it into the `youtube_playlist_summary.py` file, as indicated by comments (near the top).
 	
-If you don't know how to get one: don't worry, it's super simple :). Just follow the quick instructions in the **Getting A Youtube API Key** section below.
+If you don't know how to get one: don't worry, it's super simple. Just follow the quick instructions in the **Getting A Youtube API Key** section below.
 
 **Note #2**: You need [**Python 3**](https://www.python.org/downloads/) installed.
 
@@ -40,7 +38,7 @@ python3 youtube_playlist_summary.py <paste link to a youtube playlist>
 
 
 ## Getting A Youtube API Key
-Don't worry, getting a Youtube API key is a **piece of cake**. Like, 10 clicks.
+Don't worry, getting a Youtube API key is a **piece of cake**. Like, 9 clicks.
 
 1. Go to https://console.developers.google.com/ (sign in with a gmail account)
 2. Create a "NEW PROJECT" 
@@ -70,8 +68,8 @@ Next-level functionality:
 ## Misc Comments
 - Code was functional with Youtube API as of Dec 2019.
 - Youtube's video durations are supplied in a format called: ["ISO 8601"](https://en.wikipedia.org/wiki/ISO_8601#Durations)
-- With an API key, we can retrieve a count of *"Total items in playlist"*, which includes non-public / non-published videos. However, the videos themselves can't actually be retrieved with API alone.
-	- You'd need an OAuth client ID, which is a different ballgame and outside the scope of this project.
+- With an API key, we can retrieve a count of *"Total items in playlist"*, which includes "non-public" / "non-published" videos. However, those "non-public" / "non-published" videos themselves can't actually be retrieved with API alone.
+	- You'd need an OAuth client ID, which is a different ballgame – outside the scope of this project.
 - A "[Deleted video]" in a Youtube playlist won't count to this project's calculated total watch time, but it will still count as one of the 50 video ids allowed in a single video GET request. (50 is the max allowed.)
 	- So for example, if a Youtube playlist has 52 videos, 5 of which are labeled as "[Deleted video]", this script will ping the Youtube API 4 times:
 		1. Pinging "playlist" once for the first 50 videos
